@@ -1,0 +1,41 @@
+# Instructions
+
+During your interaction with the user, if you find anything reusable in this project (e.g. version of a library, model name), especially about a fix to a mistake you made or a correction you received, you should take note in the `Lessons` section in the `.cursorrules` file so you will not make the same mistake again. 
+
+You should also use the `.cursorrules` file as a Scratchpad to organize your thoughts. Especially when you receive a new task, you should first review the content of the Scratchpad, clear old different task if necessary, first explain the task, and plan the steps you need to take to complete the task. You can use todo markers to indicate the progress, e.g.
+[X] Task 1
+[ ] Task 2
+
+Also update the progress of the task in the Scratchpad when you finish a subtask.
+Especially when you finished a milestone, it will help to improve your depth of task accomplishment to use the Scratchpad to reflect and plan.
+The goal is to help you maintain a big picture as well as the progress of the task. Always refer to the Scratchpad when you plan the next step.
+
+
+# Scratchpad
+
+## Task: Create ripzilla library
+
+[X] Create directory structure (`ripzilla/`, `__init__.py`, `core.py`, `extractors.py`, `utils.py`, `exceptions.py`, `setup.py`, `requirements.txt`)
+[X] Implement `exceptions.py` (`ExtractionError`)
+[X] Implement `utils.py` (`download_video`)
+[X] Implement `extractors.py` (`try_stream_extract`, `try_local_extract`, `fallback_download_extract` with tenacity)
+[X] Implement `core.py` (`extract_audio` logic)
+[X] Implement `__init__.py` (expose main function and exception)
+[X] Implement `setup.py`
+[X] Create `requirements.txt`
+[X] Create basic `README.md`
+[X] Implement basic `cli.py`
+[X] Add check for audio stream presence using ffprobe
+    [X] Define specific exception hierarchy
+    [X] Add configurable timeouts (ffmpeg, ffprobe)
+    [X] Add disk space check for fallback download
+    [ ] Update documentation (README, docstrings)
+    [X] Update tests for new exceptions/features
+    [X] Add HWAccel Support (VideoToolbox first)
+        [X] Detect VideoToolbox support
+        [X] Inject flags into command
+        [X] Update documentation
+        [X] Add tests
+    [X] Add user configuration for HWAccel (auto/cpu/gpu)
+    [X] Add Audio Quality Presets (low, medium, high, raw)
+    [X] Return Structured Response Object
