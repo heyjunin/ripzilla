@@ -39,3 +39,11 @@ The goal is to help you maintain a big picture as well as the progress of the ta
     [X] Add user configuration for HWAccel (auto/cpu/gpu)
     [X] Add Audio Quality Presets (low, medium, high, raw)
     [X] Return Structured Response Object
+[X] Update library metadata with user information
+    [X] Update setup.py (author name, email, github repository URL)
+    [X] Update README.md repository URLs
+
+# Lessons
+
+- When updating library metadata, make sure to check setup.py, README.md, and LICENSE files for author information and URLs.
+- Repository and author information may be included in multiple places including badges, code examples, and documentation.
