@@ -14,12 +14,12 @@ with open(os.path.join(this_directory, "ripzilla", "__init__.py")) as fp:
 setuptools.setup(
     name="ripzilla",
     version=version["__version__"],
-    author="Your Name", # TODO: Replace with actual author name
-    author_email="your.email@example.com", # TODO: Replace with actual author email
+    author="Junior Araujo",
+    author_email="juninho@juninho.io",
     description="A robust library to extract audio from local or remote videos.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/ripzilla", # TODO: Replace with actual URL
+    url="https://github.com/heyjunin/ripzilla",
     packages=setuptools.find_packages(),
     install_requires=[
         "tenacity>=8.2.0",

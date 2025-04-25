@@ -2,7 +2,7 @@
 
 [![PyPI version](https://badge.fury.io/py/ripzilla.svg)](https://badge.fury.io/py/ripzilla) <!-- TODO: Add link once published -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) <!-- TODO: Add LICENSE file -->
-[![Tests](https://github.com/yourusername/ripzilla/actions/workflows/test.yml/badge.svg)](https://github.com/yourusername/ripzilla/actions/workflows/test.yml) <!-- TODO: Setup GitHub Actions -->
+[![Tests](https://github.com/heyjunin/ripzilla/actions/workflows/test.yml/badge.svg)](https://github.com/heyjunin/ripzilla/actions/workflows/test.yml) <!-- TODO: Setup GitHub Actions -->
 
 **Ripzilla** é uma biblioteca Python robusta e resiliente para extrair áudio de vídeos, sejam eles arquivos locais ou URLs remotas.
 
@@ -39,7 +39,7 @@ Ou instale a partir do código fonte:
 
 ```bash
 # Clone o repositório
-git clone https://github.com/yourusername/ripzilla.git # TODO: Update URL
+git clone https://github.com/heyjunin/ripzilla.git
 cd ripzilla
 
 # Instale
