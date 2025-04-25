@@ -1,0 +1,5 @@
+AMQP details
+User & Vhost	zqstkjzd
+Password	ZHWOCejSqUgTajB4cxiZjGclTMCO2Cvk Rotate password
+Ports	5672 (5671 for TLS)
+amqps://zqstkjzd:ZHWOCejSqUgTajB4cxiZjGclTMCO2Cvk@leopard.lmq.cloudamqp.com/zqstkjzd

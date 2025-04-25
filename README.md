@@ -215,6 +215,67 @@ A biblioteca levanta exceções específicas para diferentes problemas:
 
 Use blocos `try...except` para tratar esses erros na sua aplicação (veja exemplo na seção de Uso).
 
+## 🐳 Docker
+
+O projeto inclui configurações Docker para facilitar a execução do worker e testes end-to-end.
+
+### Preparando o Ambiente Docker
+
+Certifique-se de ter o Docker e o Docker Compose instalados:
+- **macOS/Windows:** Instale o Docker Desktop
+- **Linux:** Instale o Docker Engine e o Docker Compose
+
+### Executando com Docker Compose
+
+Para iniciar todos os serviços (RabbitMQ, worker e testes):
+
+```bash
+docker-compose up
+```
+
+Para construir as imagens antes de iniciar:
+
+```bash
+docker-compose build
+docker-compose up
+```
+
+Para iniciar apenas o RabbitMQ e o worker (sem executar os testes):
+
+```bash
+docker-compose up rabbitmq worker
+```
+
+Para executar em segundo plano:
+
+```bash
+docker-compose up -d
+```
+
+### Serviços Disponíveis
+
+1. **RabbitMQ:**
+   - Interface de gerenciamento: http://localhost:15672
+   - Credenciais padrão: guest/guest
+
+2. **Worker:**
+   - Processa tarefas de extração de áudio
+   - Conecta-se automaticamente ao RabbitMQ
+   - Monitora a fila `jobs.audio.extract`
+
+3. **E2E Tests:**
+   - Testes end-to-end para validar o funcionamento do worker
+   - Executa automaticamente após o worker estar operacional
+
+### Volumes e Persistência
+
+- `rabbitmq_data`: Armazena dados do RabbitMQ para persistência entre reinicializações
+- `ripzilla_temp`: Diretório temporário compartilhado para arquivos de áudio processados
+
+### Variáveis de Ambiente
+
+As variáveis de ambiente para cada serviço estão configuradas no `docker-compose.yml`. Você pode personalizá-las criando um arquivo `.env` ou modificando diretamente o arquivo Docker Compose.
+
 ## 🤝 Contribuição
 
 Contribuições são bem-vindas! Abra uma issue ou envie um pull request.

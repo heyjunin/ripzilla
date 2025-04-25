@@ -1,0 +1,23 @@
+FROM python:3.11-slim
+
+# Instalar dependências
+RUN pip install --no-cache-dir pika python-dotenv
+
+# Diretório de trabalho
+WORKDIR /app
+
+# Copiar a biblioteca ripzilla diretamente para o PYTHONPATH
+COPY ripzilla /app/ripzilla/
+COPY setup.py /app/setup.py
+
+# Copiar script de teste
+COPY worker/tests/test_e2e.py /app/test_e2e.py
+
+# Dar permissão de execução
+RUN chmod +x /app/test_e2e.py
+
+# Define PYTHONPATH para incluir o diretório atual
+ENV PYTHONPATH=/app
+
+# Executar teste
+CMD ["python", "test_e2e.py"] 

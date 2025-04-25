@@ -1,0 +1,30 @@
+FROM python:3.11-slim
+
+# Instalar ffmpeg
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copiar requirements e instalar dependências
+COPY requirements.txt .
+COPY requirements-test.txt .
+COPY requirements-dev.txt .
+RUN pip install --no-cache-dir -r requirements.txt -r requirements-test.txt -r requirements-dev.txt
+
+# Copiar biblioteca Ripzilla e dependências
+COPY ripzilla/ /app/ripzilla/
+COPY setup.py /app/
+
+# Copiar testes
+COPY tests/ /app/tests/
+
+# Criar diretório temporário para arquivos de áudio
+RUN mkdir -p /tmp/ripzilla
+
+# Configurar PYTHONPATH
+ENV PYTHONPATH "${PYTHONPATH}:/app"
+
+# Comando para executar os testes
+CMD ["pytest", "tests/", "-v"] 

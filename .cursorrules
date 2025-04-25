@@ -42,8 +42,19 @@ The goal is to help you maintain a big picture as well as the progress of the ta
 [X] Update library metadata with user information
     [X] Update setup.py (author name, email, github repository URL)
     [X] Update README.md repository URLs
+[X] Setup Docker environment
+    [X] Create `Dockerfile.worker` for the worker service
+    [X] Create `Dockerfile.test` for tests
+    [X] Verify `docker-compose.yml` configuration
+    [X] Create `requirements-test.txt` for test dependencies
+    [X] Update README.md with Docker documentation
+    [X] Test end-to-end functionality with Docker containers
+    [X] Create script for manual testing of the worker service
 
 # Lessons
 
 - When updating library metadata, make sure to check setup.py, README.md, and LICENSE files for author information and URLs.
 - Repository and author information may be included in multiple places including badges, code examples, and documentation.
+- When creating Docker files, ensure consistent directory structures between the host and container.
+- Use multiple Docker files for different services (worker, tests) and coordinate them in docker-compose.yml.
+- Docker volumes should be used for data persistence and sharing between containers.
