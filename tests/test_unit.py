@@ -75,7 +75,9 @@ def test_detect_best_hwaccel_linux_cuda(mock_run):
 
 @patch('subprocess.run')
 def test_detect_best_hwaccel_no_preferred(mock_run):
-    mock_run.return_value = MagicMock(returncode=0, stdout='''Hardware acceleration methods:\nvaapi\nopencl''', stderr='')
+    mock_run.return_value = MagicMock(returncode=0, stdout='''Hardware acceleration methods:
+vaapi
+opencl''', stderr='')
     assert detect_best_hwaccel() is None
 
 @patch('subprocess.run')
@@ -237,7 +239,7 @@ def test_try_local_extract_failure_retries(mock_run_ffmpeg, mock_exists, mock_ge
 
 @patch('os.unlink')
 @patch('tempfile.NamedTemporaryFile')
-@patch('ripzilla.utils._check_disk_space')
+@patch('ripzilla.extractors._check_disk_space')
 @patch('ripzilla.extractors.try_local_extract')
 @patch('ripzilla.utils.requests.get')
 def test_fallback_download_extract_success(mock_get, mock_try_local_extract, mock_check_disk_space, mock_tempfile, mock_unlink):
@@ -259,7 +261,7 @@ def test_fallback_download_extract_success(mock_get, mock_try_local_extract, moc
 
 @patch('os.unlink')
 @patch('tempfile.NamedTemporaryFile')
-@patch('ripzilla.utils._check_disk_space')
+@patch('ripzilla.extractors._check_disk_space')
 @patch('ripzilla.utils.requests.get', side_effect=requests.exceptions.RequestException('Download failed'))
 def test_fallback_download_extract_download_failure(mock_get, mock_check_disk_space, mock_tempfile, mock_unlink):
     mock_temp_file_obj = MagicMock()
@@ -274,7 +276,7 @@ def test_fallback_download_extract_download_failure(mock_get, mock_check_disk_sp
 @patch('os.unlink')
 @patch('tempfile.NamedTemporaryFile')
 @patch('ripzilla.utils.requests.get', side_effect=requests.exceptions.RequestException('Download failed'))
-@patch('ripzilla.utils._check_disk_space', side_effect=DiskSpaceError('No space'))
+@patch('ripzilla.extractors._check_disk_space', side_effect=DiskSpaceError('No space'))
 def test_fallback_download_extract_disk_space_failure(mock_check_disk_space, mock_get, mock_tempfile, mock_unlink):
     mock_temp_file_obj = MagicMock()
     mock_temp_file_obj.name = '/tmp/temp_video.mp4'
@@ -283,11 +285,11 @@ def test_fallback_download_extract_disk_space_failure(mock_check_disk_space, moc
     with pytest.raises(DiskSpaceError):
         fallback_download_extract('http://example.com/video.mp4', 'output.aac')
 
-    mock_unlink.assert_called_once()
+    mock_unlink.assert_not_called() # Corrected assertion
 
 @patch('os.unlink')
 @patch('tempfile.NamedTemporaryFile')
-@patch('ripzilla.utils._check_disk_space')
+@patch('ripzilla.extractors._check_disk_space')
 @patch('ripzilla.utils.requests.get')
 @patch('ripzilla.extractors.try_local_extract', side_effect=FFmpegError('Local extract failed'))
 def test_fallback_download_extract_local_extract_failure(mock_try_local_extract, mock_get, mock_check_disk_space, mock_tempfile, mock_unlink):
