@@ -7,9 +7,14 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
 
 # Read the version from __init__.py
-version = {}
-with open(os.path.join(this_directory, "ripzilla", "__init__.py")) as fp:
-    exec(fp.read(), version)
+import re
+version_file_path = os.path.join(this_directory, "ripzilla", "__init__.py")
+with open(version_file_path, "r") as fp:
+    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", fp.read(), re.M)
+    if version_match:
+        version = {"__version__": version_match.group(1)}
+    else:
+        raise RuntimeError("Unable to find __version__ string.")
 
 setuptools.setup(
     name="ripzilla",
@@ -31,7 +36,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
-        "License :: OSI Approved :: MIT License", # TODO: Choose appropriate license
+        "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Topic :: Multimedia :: Sound/Audio :: Conversion",
         "Topic :: Software Development :: Libraries :: Python Modules",

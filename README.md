@@ -1,8 +1,7 @@
 # ripzilla 🦎✂️
 
-[![PyPI version](https://badge.fury.io/py/ripzilla.svg)](https://badge.fury.io/py/ripzilla) <!-- TODO: Add link once published -->
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) <!-- TODO: Add LICENSE file -->
-[![Tests](https://github.com/heyjunin/ripzilla/actions/workflows/test.yml/badge.svg)](https://github.com/heyjunin/ripzilla/actions/workflows/test.yml) <!-- TODO: Setup GitHub Actions -->
+[![PyPI version](https://badge.fury.io/py/ripzilla.svg)](https://pypi.org/project/ripzilla/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **Ripzilla** é uma biblioteca Python robusta e resiliente para extrair áudio de vídeos, sejam eles arquivos locais ou URLs remotas.
 
@@ -68,7 +67,7 @@ from ripzilla import (
     # FileNotFoundError      # Arquivo local não encontrado ou ffmpeg/ffprobe ausente
 )
 
-# --- Exemplo Básico --- 
+# --- Exemplo Básico ---
 VIDEO_SOURCE = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
 # VIDEO_SOURCE = "/path/to/local/video.mp4"
 OUTPUT_FILE = "extracted_audio.aac"
@@ -90,7 +89,7 @@ try:
     print(f"🔧 Timeout FFprobe: {result.ffprobe_timeout}s")
     print("------------------------")
 
-# --- Tratamento Específico de Erros --- 
+# --- Tratamento Específico de Erros ---
 except NoAudioStreamError as e:
     print(f"⚠️ Aviso: {e}") # Vídeo de entrada não possui áudio.
 except RipzillaTimeoutError as e:
@@ -145,7 +144,7 @@ Em caso de sucesso, `extract_audio` retorna um objeto `dataclass` `ExtractionRes
 *   `ffmpeg_timeout` (int): O timeout configurado para `ffmpeg`.
 *   `ffprobe_timeout` (int): O timeout configurado para `ffprobe`.
 
-## 命令行界面 (CLI)
+## Interface de Linha de Comando (CLI)
 
 Use a ferramenta `ripzilla` no terminal:
 
@@ -189,7 +188,7 @@ ripzilla https://example.com/lecture.mp4 lecture_audio.opus --quality low --hwac
 *   **`medium`:** Re-codifica para áudio AAC a ~128 kbps estéreo. Qualidade padrão, tamanho de arquivo menor.
 *   **`low`:** Re-codifica para áudio Opus a ~64 kbps mono, 16kHz de taxa de amostragem, com filtro passa-alta (`highpass`). Otimizado para fala (ex: para STT), menor tamanho de arquivo. Requer `ffmpeg` compilado com suporte a `libopus`.
 
-##  Handling Large Files & Potential Issues
+## Handling Large Files & Potential Issues
 
 *   **Memória:** Ripzilla é eficiente em termos de memória, evitando carregar vídeos inteiros.
 *   **Streaming:** Tenta processar URLs diretamente via streaming.
@@ -254,23 +253,23 @@ docker-compose up -d
 
 ### Serviços Disponíveis
 
-1. **RabbitMQ:**
-   - Interface de gerenciamento: http://localhost:15672
-   - Credenciais padrão: guest/guest
+1.  **RabbitMQ:**
+    *   Interface de gerenciamento: http://localhost:15672
+    *   Credenciais padrão: guest/guest
 
-2. **Worker:**
-   - Processa tarefas de extração de áudio
-   - Conecta-se automaticamente ao RabbitMQ
-   - Monitora a fila `jobs.audio.extract`
+2.  **Worker:**
+    *   Processa tarefas de extração de áudio
+    *   Conecta-se automaticamente ao RabbitMQ
+    *   Monitora a fila `jobs.audio.extract`
 
-3. **E2E Tests:**
-   - Testes end-to-end para validar o funcionamento do worker
-   - Executa automaticamente após o worker estar operacional
+3.  **E2E Tests:**
+    *   Testes end-to-end para validar o funcionamento do worker
+    *   Executa automaticamente após o worker estar operacional
 
 ### Volumes e Persistência
 
-- `rabbitmq_data`: Armazena dados do RabbitMQ para persistência entre reinicializações
-- `ripzilla_temp`: Diretório temporário compartilhado para arquivos de áudio processados
+-   `rabbitmq_data`: Armazena dados do RabbitMQ para persistência entre reinicializações
+-   `ripzilla_temp`: Diretório temporário compartilhado para arquivos de áudio processados
 
 ### Variáveis de Ambiente
 
@@ -282,7 +281,7 @@ Contribuições são bem-vindas! Abra uma issue ou envie um pull request.
 
 ## 📝 Licença
 
-Este projeto está licenciado sob a Licença MIT - veja o arquivo `LICENSE` para detalhes. <!-- TODO: Add LICENSE file -->
+Este projeto está licenciado sob a Licença MIT - veja o arquivo `LICENSE` para detalhes.
 
 ## ☑️ TODO
 
@@ -290,4 +289,3 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo `LICENSE` para
 *   Permitir configuração do limite mínimo de espaço em disco.
 *   Melhorar a robustez da detecção de ferramentas (`ffmpeg`/`ffprobe`).
 *   Adicionar testes unitários mais abrangentes.
-*   Publicar no PyPI. 
