@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ripzilla"
+version = "0.1.1"
+authors = [
+  { name="Junior Araujo", email="juninho@juninho.io" },
+]
+description = "A robust library to extract audio from local or remote videos."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Multimedia :: Sound/Audio :: Conversion",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "tenacity>=8.2.0",
+    "requests>=2.25.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/heyjunin/ripzilla"
+"Bug Tracker" = "https://github.com/heyjunin/ripzilla/issues"
+
+[project.scripts]
+ripzilla = "ripzilla.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["ripzilla"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+]

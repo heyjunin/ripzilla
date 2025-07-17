@@ -1,0 +1,2 @@
+[console_scripts]
+ripzilla = ripzilla.cli:main

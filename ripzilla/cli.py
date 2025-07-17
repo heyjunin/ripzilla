@@ -113,7 +113,8 @@ def main():
             ffmpeg_timeout=args.ffmpeg_timeout,
             ffprobe_timeout=args.ffprobe_timeout,
             hwaccel_mode=args.hwaccel,
-            quality=args.quality
+            quality=args.quality,
+            min_disk_space_gb=args.min_disk_space_gb
         )
         logger.info(f"Successfully extracted audio to {args.output}")
         # Print result details

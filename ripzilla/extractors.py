@@ -4,7 +4,7 @@ import os
 import tempfile
 import logging
 from typing import Literal, Dict, List
-from .utils import download_video, _check_disk_space, detect_best_hwaccel
+from .utils import download_video, _check_disk_space, detect_best_hwaccel, _get_hwaccel_for_extraction
 from .exceptions import ExtractionError, FFmpegError, RipzillaTimeoutError, NetworkError, DiskSpaceError
 
 logger = logging.getLogger(__name__)
@@ -119,16 +119,7 @@ def try_stream_extract(
     logger.info(f"Attempting streaming extraction for {url} -> {output_path} (Quality: {quality}, HWAccel: {hwaccel_mode})")
 
     # Determine hwaccel to use based on mode
-    hwaccel_to_use = None
-    if hwaccel_mode != "cpu":
-        detected_hwaccel = detect_best_hwaccel()
-        if hwaccel_mode == "auto" and detected_hwaccel:
-            hwaccel_to_use = detected_hwaccel
-        elif hwaccel_mode == "gpu":
-            if detected_hwaccel:
-                hwaccel_to_use = detected_hwaccel
-            else:
-                logger.warning("GPU acceleration requested, but no compatible method detected. Using CPU.")
+    hwaccel_to_use = _get_hwaccel_for_extraction(hwaccel_mode)
 
     # Build command using helper
     try:
@@ -161,16 +152,7 @@ def try_local_extract(
          raise FileNotFoundError(f"Input file not found: {local_path}")
 
     # Determine hwaccel to use
-    hwaccel_to_use = None
-    if hwaccel_mode != "cpu":
-        detected_hwaccel = detect_best_hwaccel()
-        if hwaccel_mode == "auto" and detected_hwaccel:
-            hwaccel_to_use = detected_hwaccel
-        elif hwaccel_mode == "gpu":
-            if detected_hwaccel:
-                hwaccel_to_use = detected_hwaccel
-            else:
-                logger.warning("GPU acceleration requested, but no compatible method detected. Using CPU.")
+    hwaccel_to_use = _get_hwaccel_for_extraction(hwaccel_mode)
 
     # Build command
     try:
@@ -193,7 +175,8 @@ def fallback_download_extract(
     output_path: str,
     ffmpeg_timeout: int = DEFAULT_FFMPEG_TIMEOUT,
     hwaccel_mode: Literal["auto", "gpu", "cpu"] = "auto",
-    quality: str = "raw" # Pass quality through
+    quality: str = "raw",
+    min_disk_space_gb: float = 1.0 # New parameter
 ):
     """Downloads the video and then extracts audio locally as a fallback."""
     # Quality and HWAccel mode are passed down to try_local_extract
@@ -202,7 +185,7 @@ def fallback_download_extract(
     try:
         # --- Check disk space in temp dir BEFORE creating file --- 
         temp_dir = tempfile.gettempdir()
-        _check_disk_space(temp_dir) # Use default check (1GB free in temp dir)
+        _check_disk_space(temp_dir, min_required_gb=min_disk_space_gb) # Pass new parameter
         # ---------------------------------------------------------
 
         # Now create the temp file and download

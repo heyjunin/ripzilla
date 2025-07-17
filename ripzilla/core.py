@@ -191,7 +191,8 @@ def extract_audio(
                 output_audio_path,
                 ffmpeg_timeout=ffmpeg_timeout,
                 hwaccel_mode=hwaccel_mode,
-                quality=quality
+                quality=quality,
+                min_disk_space_gb=min_disk_space_gb # Pass new parameter
             )
             logger.info(f"Fallback extraction successful for {input_path_or_url}")
 
@@ -249,4 +250,4 @@ def extract_audio(
         ffmpeg_timeout=ffmpeg_timeout,
         ffprobe_timeout=ffprobe_timeout
     )
-    return result 
+    return result

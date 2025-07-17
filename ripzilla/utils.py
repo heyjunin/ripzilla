@@ -6,6 +6,7 @@ import tempfile
 import os
 import sys
 import functools
+from typing import Literal
 
 # Import new exceptions
 from .exceptions import FFprobeError, NetworkError, RipzillaTimeoutError, NoAudioStreamError, DiskSpaceError
@@ -79,27 +80,36 @@ def has_audio_stream(input_path_or_url: str, timeout: int = DEFAULT_FFPROBE_TIME
 def detect_best_hwaccel() -> str | None:
     """
     Detects the best available ffmpeg hardware acceleration method for the current platform.
-    Currently checks for VideoToolbox on macOS. TODO: Add checks for CUDA/NVENC/NVDEC on Linux/Windows.
     Caches the result.
-    Returns the name of the hwaccel method (e.g., 'videotoolbox') or None.
+    Returns the name of the hwaccel method (e.g., 'videotoolbox', 'cuda') or None.
     """
-    if sys.platform != 'darwin':
-        logger.debug("Hardware acceleration check skipped: Not on macOS.")
-        return None
-
-    logger.debug("Checking for supported ffmpeg hardware acceleration on macOS...")
+    logger.debug("Checking for supported ffmpeg hardware acceleration...")
     cmd = ["ffmpeg", "-hwaccels"]
     try:
         # Short timeout for this check
         result = subprocess.run(cmd, capture_output=True, text=True, check=True, timeout=15)
         available_hwaccels = result.stdout.strip().split('\n')[1:] # Skip header line
         logger.debug(f"Available ffmpeg hwaccels: {available_hwaccels}")
-        if "videotoolbox" in available_hwaccels:
-            logger.info("VideoToolbox hardware acceleration detected.")
-            return "videotoolbox"
-        else:
-            logger.info("VideoToolbox not found in ffmpeg hardware accelerators.")
-            return None
+
+        # Prioritize common and generally performant hardware accelerators
+        priority_list = [
+            "cuda",         # NVIDIA CUDA
+            "nvenc",        # NVIDIA NVENC (encoding)
+            "nvdec",        # NVIDIA NVDEC (decoding)
+            "videotoolbox", # Apple VideoToolbox (macOS)
+            "qsv",          # Intel Quick Sync Video
+            "amf",          # AMD Advanced Media Framework
+            "vdpau",        # Video Decode and Presentation API for Unix (Linux)
+            "dxva2",        # DirectX Video Acceleration (Windows)
+        ]
+
+        for hwaccel in priority_list:
+            if hwaccel in available_hwaccels:
+                logger.info(f"Detected {hwaccel} hardware acceleration.")
+                return hwaccel
+
+        logger.info("No preferred hardware acceleration method detected. Will use CPU.")
+        return None
     except FileNotFoundError:
         logger.warning("Cannot check for hardware acceleration: ffmpeg not found.")
         return None
@@ -113,7 +123,22 @@ def detect_best_hwaccel() -> str | None:
         return None
 
 
-def _check_disk_space(check_path: str, min_required_gb: float = 1.0):
+def _get_hwaccel_for_extraction(hwaccel_mode: Literal["auto", "gpu", "cpu"]) -> str | None:
+    """Determines the actual hwaccel string to use based on mode and detection."""
+    hwaccel_to_use = None
+    if hwaccel_mode != "cpu":
+        detected_hwaccel = detect_best_hwaccel()
+        if hwaccel_mode == "auto" and detected_hwaccel:
+            hwaccel_to_use = detected_hwaccel
+        elif hwaccel_mode == "gpu":
+            if detected_hwaccel:
+                hwaccel_to_use = detected_hwaccel
+            else:
+                logger.warning("GPU acceleration requested, but no compatible method detected. Using CPU.")
+    return hwaccel_to_use
+
+
+def _check_disk_space(check_path: str, min_required_gb: float):
     """Checks if the specified path has at least min_required_gb free space."""
     try:
         usage = shutil.disk_usage(check_path)
